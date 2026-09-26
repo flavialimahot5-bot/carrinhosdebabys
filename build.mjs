@@ -41,6 +41,14 @@ for(let index=0;index<sources.length;index++){
   amount.find('[itemprop=price]').attr('content',testPrice);
  });
  $('body').attr('data-test-price',testPrice);
+ // All captured variants are enabled for the user's navigation demo.
+ $('.xprod-lib-custom-message').filter((i,e)=>$(e).text().includes('No momento, não podemos enviar este produto')).remove();
+ $('button').filter((i,e)=>['Comprar agora','Adicionar ao carrinho'].includes($(e).text().trim())).each((i,e)=>{
+  const button=$(e);
+  button.removeAttr('disabled').removeAttr('aria-disabled').removeAttr('data-andes-state').removeAttr('formaction').removeClass('andes-button--disabled').attr('type','button');
+  if(button.text().trim()==='Comprar agora')button.attr('data-buy-url','https://google.com');
+ });
+ $('.ui-pdp-action-icon--undefined').removeClass('ui-pdp-action-icon--undefined').addClass('ui-pdp-action-icon--BLUE');
  $('script,iframe,noscript,link[rel=prefetch],link[rel=preconnect],link[rel=dns-prefetch],meta[http-equiv],input[type=hidden],#g_id_onload,.grecaptcha-badge').remove();
  $('*').each((i,e)=>{for(const key of Object.keys(e.attribs||{})){if(key.startsWith('on')||key==='nonce')$(e).removeAttr(key);}});
  $('link[rel=canonical]').attr('href',source.url);

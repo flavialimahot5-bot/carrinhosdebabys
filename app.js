@@ -36,7 +36,7 @@ function addCart(){const items=cart(),product=currentProduct(),existing=items.fi
 function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Demonstração local · nenhuma compra será realizada.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button></div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
 $('#nav-cart')?.addEventListener('click',e=>{e.preventDefault();showCart();});updateCart();
 $$('button').filter(b=>b.textContent.trim()==='Adicionar ao carrinho').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();}));
-$$('button').filter(b=>b.textContent.trim()==='Comprar agora').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();modal(`<h2>Resumo do produto</h2><p>${esc($('h1').textContent)}</p><p>${quantity} unidade(s) · ${esc(currentProduct().variant)}</p><p>Esta página é uma reprodução para demonstração. Pagamento e entrega devem ser confirmados no anúncio original.</p>${sourceLink('Abrir anúncio original')}`);}));
+$$('button[data-buy-url]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();window.location.assign(b.dataset.buyUrl);}));
 
 // Expand the captured specifications and description without inventing data.
 $('#see-more-button-hs-features')?.addEventListener('click',e=>{e.preventDefault();$('#highlighted_specs_attrs')?.scrollIntoView({behavior:'smooth'});});
