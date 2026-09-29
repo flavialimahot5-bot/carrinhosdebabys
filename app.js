@@ -86,5 +86,5 @@ $('#nav-footer-access-switch')?.addEventListener('click',()=>modal('<h2>Sobre es
 offers.forEach(offer=>offer.addEventListener('click',event=>{if(event.target.closest('button,a,select,input'))return;const radio=$('input[type=radio]',offer);if(radio&&!radio.checked){radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));}}));
 
 // Preserve local handlers while keeping reference-only controls on this page.
-document.addEventListener('click',e=>{const control=e.target.closest('[data-local-only]');if(control&&!e.defaultPrevented){e.preventDefault();toast('Recurso indisponível nesta demonstração.');}});
+document.addEventListener('click',e=>{const control=e.target.closest('[data-local-only]');if(control&&!e.defaultPrevented)e.preventDefault();});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-local-only]')){e.preventDefault();e.target.click();}});
