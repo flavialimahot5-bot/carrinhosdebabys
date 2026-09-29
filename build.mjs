@@ -29,6 +29,13 @@ const ids=sources.map(s=>new URL(s.url).pathname.split('/').pop());
 const testPrice='67.90';
 for(let index=0;index<sources.length;index++){
  const source=sources[index];const $=load(source.html);
+ // Match the requested demo delivery panel for the Preto/Bronze variant.
+ if(index===6){
+  const reference=load(sources[5].html);
+  $('.xprod-lib-shipping-section').first().replaceWith(reference('.xprod-lib-shipping-section').first().toString());
+  $('.ui-pdp-stock-and-full').first().html(reference('.ui-pdp-stock-and-full').first().html());
+  if(!$('#full_icon').length){const icon=reference('#full_icon');if(icon.length)$('body').append('<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute"><defs>'+icon.toString()+'</defs></svg>');}
+ }
  // Keep only the lower offer, which contains the selected purchase and delivery details.
  const sellerOffers=$('.ui-pdp-buy-box-offers__offer-list-item');
  if(sellerOffers.length>1)sellerOffers.slice(0,-1).remove();
