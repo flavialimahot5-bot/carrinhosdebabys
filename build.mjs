@@ -38,12 +38,20 @@ for(let index=0;index<sources.length;index++){
  $('.ui-pdp-price .andes-money-amount').each((i,e)=>{
   const amount=$(e);
   amount.attr('aria-label','67 reais com 90 centavos');
-  amount.find('.andes-money-amount__fraction').text('67');
-  if(!amount.find('.andes-money-amount__cents').length)amount.append('<span class="andes-visually-hidden" aria-hidden="true">,</span><span class="andes-money-amount__cents" aria-hidden="true">90</span>');
-  amount.find('.andes-money-amount__cents').text('90');
+  amount.find('.andes-money-amount__fraction').text('67,90');
+  amount.find('.andes-money-amount__cents,.andes-visually-hidden').remove();
   amount.find('[itemprop=price]').attr('content',testPrice);
  });
  $('body').attr('data-test-price',testPrice);
+ const purchasePrice='<div class="local-purchase-price"><strong>R$ 67,90</strong><span>no Pix</span></div>';
+ const mainBuybox=$('#buybox-form').first();
+ if(mainBuybox.find('.ui-pdp-buy-box-offers__offer-price').length){
+  mainBuybox.find('.andes-radio__label span').text('Melhor preço');
+  mainBuybox.find('.ui-pdp-buy-box-offers__offer-price').html(purchasePrice);
+ }else{
+  mainBuybox.prepend('<div class="local-purchase-heading"><div class="local-purchase-label">Melhor preço<span aria-hidden="true">◉</span></div>'+purchasePrice+'</div>');
+ }
+ $('.ui-pdp-stock-information__title').text('Estoque disponível');
  // All captured variants are enabled for the user's navigation demo.
  $('.xprod-lib-custom-message').filter((i,e)=>$(e).text().includes('No momento, não podemos enviar este produto')).remove();
  $('button').filter((i,e)=>['Comprar agora','Adicionar ao carrinho'].includes($(e).text().trim())).each((i,e)=>{

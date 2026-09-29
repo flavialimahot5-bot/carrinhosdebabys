@@ -4,6 +4,14 @@ import {load} from 'cheerio';
 for(let i=0;i<7;i++){
  const filename=i?`variant-${i}.html`:'index.html';const $=load(fs.readFileSync(filename,'utf8'));
  assert.equal($('h1').length,1,`${filename}: missing title`);
+ const buybox=$('#buybox-form').first();
+ assert.equal(buybox.find('.local-purchase-price strong').text(),'R$ 67,90',`${filename}: purchase price`);
+ assert.ok(buybox.text().includes('Estoque disponível'),`${filename}: available stock`);
+ assert.ok(buybox.text().includes('Melhor preço'),`${filename}: offer label`);
+ const buyButtons=$('button[data-buy-url]');
+ assert.ok(buyButtons.length,`${filename}: purchase button`);
+ buyButtons.each((_,e)=>{assert.equal($(e).attr('disabled'),undefined);assert.equal($(e).attr('data-buy-url'),'https://google.com');});
+ $('.ui-pdp-price .andes-money-amount__fraction').each((_,e)=>assert.equal($(e).text(),'67,90',`${filename}: visible decimal comma`));
  assert.equal($('.ui-pdp-outside_variations__thumbnails__item').length,7);
  assert.ok($('.ui-pdp-gallery__figure__image').length>=6);
  assert.equal($('script').length,2);assert.equal($('script').first().attr('src'),'/app.js');assert.equal($('script').last().attr('src'),'/responsive.js');
