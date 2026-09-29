@@ -42,7 +42,17 @@ $$('button[data-buy-url]').forEach(b=>b.addEventListener('click',e=>{e.preventDe
 $('#see-more-button-hs-features')?.addEventListener('click',e=>{e.preventDefault();$('#highlighted_specs_attrs')?.scrollIntoView({behavior:'smooth'});});
 $$('button.ui-pdp-collapsable__action').forEach(button=>button.addEventListener('click',()=>{const parent=button.closest('.ui-pdp-collapsable');const expanded=parent.classList.toggle('local-expanded');parent.classList.toggle('ui-pdp-collapsable--is-collapsed',!expanded);const box=$('.ui-pdp-collapsable__container',parent);box.style.maxHeight=expanded?'none':'400px';button.setAttribute('aria-expanded',String(expanded));button.textContent=expanded?'Ver menos características':'Conferir todas as características';}));
 $('.ui-vpp-highlighted-specs__features-list-toggle')?.addEventListener('click',()=>{const specs=$('#highlighted_specs_attrs');specs?.scrollIntoView({behavior:'smooth'});$('.ui-pdp-collapsable__action',specs)?.click();});
-$$('a').filter(a=>a.textContent.trim()==='Ver descrição completa').forEach(a=>a.onclick=e=>{e.preventDefault();const description=$('#description');description.classList.toggle('local-expanded');a.textContent='Descrição completa';});
+$$('a').filter(a=>a.textContent.trim()==='Ver descrição completa').forEach(a=>{
+ const wrapper=a.closest('.ui-pdp-collapsable'),box=$('.ui-pdp-collapsable__container',wrapper);
+ a.setAttribute('aria-expanded','false');a.setAttribute('aria-controls','description');
+ a.onclick=e=>{e.preventDefault();const expanded=a.getAttribute('aria-expanded')!=='true';
+  wrapper.classList.toggle('local-expanded',expanded);
+  wrapper.classList.toggle('ui-pdp-collapsable--is-collapsed',!expanded);
+  box.style.maxHeight=expanded?'none':'400px';
+  a.setAttribute('aria-expanded',String(expanded));
+  a.textContent=expanded?'Ver menos descrição':'Ver descrição completa';a.title=a.textContent;
+ };
+});
 $('#link__label')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('Link copiado!');}catch{modal(`<h2>Compartilhar</h2><input readonly aria-label="Link da página" value="${esc(location.href)}">`);}});
 $('#ui-pdp-price__payments-link')?.addEventListener('click',e=>{e.preventDefault();const section=$$('.ui-pdp-container__row').find(x=>x.className.includes('payment-methods'));modal('<h2>Meios de pagamento</h2>'+(section?.innerHTML||'<p>Pix, cartões de crédito e boleto bancário.</p>')+'<p class="local-muted">Condições capturadas do anúncio. Confirme valores e parcelamento na loja.</p>');});
 $$('button').filter(b=>/Mais detalhes e formas de entrega/.test(b.textContent)).forEach(b=>b.onclick=()=>modal(`<h2>Formas de entrega</h2><p>Os prazos e valores exibidos são demonstrativos. A consulta de CEP não está disponível neste teste.</p>${sourceLink('Consultar entrega')}`));
