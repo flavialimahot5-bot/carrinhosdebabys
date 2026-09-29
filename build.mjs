@@ -76,6 +76,10 @@ for(let index=0;index<sources.length;index++){
  $('form').removeAttr('action').removeAttr('method');
  $('video').each((i,e)=>{const v=$(e);v.removeAttr('autoplay');if((v.attr('src')||'').startsWith('blob:'))v.remove();});
  $('a[href]').each((i,e)=>{const a=$(e),href=a.attr('href');if(!href.startsWith('#')&&!href.startsWith('javascript:')){const url=new URL(href,source.url);const id=url.pathname.split('/').pop();if(a.hasClass('ui-pdp-outside_variations__thumbnails__item')&&ids.includes(id)){a.attr('href',id===ids[0]?'/':'/variant-'+ids.indexOf(id)+'.html');}else{a.attr('href',url.href).attr('target','_blank').attr('rel','noopener noreferrer');}}});
+ // External reference links are visual-only in the isolated demo.
+ $('a[href]').each((i,e)=>{const a=$(e),href=a.attr('href');if(/^https?:/i.test(href)){a.removeAttr('href').removeAttr('target').removeAttr('rel').attr('data-local-only','true').attr('role','button').attr('tabindex','0');}});
+ $('.nav-logo').attr('href','/').removeAttr('data-local-only').removeAttr('role').removeAttr('tabindex');
+ $('[formaction]').removeAttr('formaction');
  $('.ui-pdp-gallery__figure__image').each((i,e)=>{const url=$(e).attr('data-zoom')||$(e).attr('src');$(e).attr('data-full-image',url).attr('src',url);});
  const jobs=[];
  $('img[src],link[rel=stylesheet],link[as=font]').each((i,e)=>jobs.push(async()=>{const el=$(e),attr=e.name==='img'?'src':'href';el.attr(attr,await asset(el.attr(attr)));}));

@@ -16,6 +16,7 @@ for(let i=0;i<7;i++){
  assert.ok($('.ui-pdp-gallery__figure__image').length>=6);
  assert.equal($('script').length,2);assert.equal($('script').first().attr('src'),'/app.js');assert.equal($('script').last().attr('src'),'/responsive.js');
  assert.equal($('iframe').length,0);
+ assert.equal($('a[href^="http"],a[href^="//"],[formaction],form[action]').length,0,`${filename}: external navigation removed`);
  $('img[src^="/assets/"],link[href^="/assets/"]').each((_,e)=>{const url=$(e).attr(e.name==='img'?'src':'href');assert.ok(fs.existsSync('.'+url),url);});
  $('.ui-pdp-outside_variations__thumbnails__item').each((_,e)=>{const url=$(e).attr('href');assert.ok(url==='/'||/^\/variant-[1-6]\.html$/.test(url),url);});
  console.log(`PASS ${filename}: ${$('.ui-pdp-gallery__figure__image').length} photos, 7 variants, local assets`);
