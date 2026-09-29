@@ -29,6 +29,9 @@ const ids=sources.map(s=>new URL(s.url).pathname.split('/').pop());
 const testPrice='67.90';
 for(let index=0;index<sources.length;index++){
  const source=sources[index];const $=load(source.html);
+ // Keep only the lower offer, which contains the selected purchase and delivery details.
+ const sellerOffers=$('.ui-pdp-buy-box-offers__offer-list-item');
+ if(sellerOffers.length>1)sellerOffers.slice(0,-1).remove();
  // Apply the requested demo price to product offers, leaving shipping and recommendations intact.
  $('.ui-pdp-price .andes-money-amount--previous,.ui-pdp-price .andes-money-amount__discount').remove();
  $('.ui-pdp-price .ui-pdp-price__subtitles').html('<p class="ui-pdp-color--BLACK ui-pdp-size--XSMALL">ou R$ 67,90 em outros meios</p>');
