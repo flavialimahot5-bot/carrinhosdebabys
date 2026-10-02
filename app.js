@@ -35,7 +35,22 @@ function addCart(){const items=cart(),product=currentProduct(),existing=items.fi
 function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Itens salvos neste navegador. Pagamento e envio de pedidos não estão disponíveis.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button></div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
 $('#nav-cart')?.addEventListener('click',e=>{e.preventDefault();showCart();});updateCart();
 $$('button').filter(b=>b.textContent.trim()==='Adicionar ao carrinho').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();}));
-$('button[data-buy-local]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();showCart();}));
+const grayCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_jahknNngdy_Tyq7ipdL5djR6jlucAJWMbZ4MRqYWrRE';
+const silverCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_oiiH3091Z2bJMZ9QyN0QnXAVilbbYX-2k958ehRUo8M';
+const blackHailSilverCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_CUL3gIz0qM8VKqadq1Wqg0998la4jI2XlHO4Z5Htz1Y';
+const blackBronzeCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_y3MMhLQ8eUzbJtKEwkW4jFCIaY1jBZT2diQ52hTTjl8';
+const blackSilverCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_c28r_6dJKP6xmg7RXnIMPH_bw9-h3fnA935oa9z_WR0';
+const blackBronzeBronzeCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_hh3LnpGHYoQekPXmTyy6acB1hpiZCM6oNlzD4jUNVZU';
+$$('button[data-buy-local]').forEach(b=>b.addEventListener('click',e=>{
+ e.preventDefault();
+ if(['0','1'].includes(document.body.dataset.variant)){location.assign(grayCheckoutUrl);return;}
+ if(document.body.dataset.variant==='2'){location.assign(silverCheckoutUrl);return;}
+ if(document.body.dataset.variant==='3'){location.assign(blackHailSilverCheckoutUrl);return;}
+ if(document.body.dataset.variant==='4'){location.assign(blackBronzeCheckoutUrl);return;}
+ if(document.body.dataset.variant==='5'){location.assign(blackSilverCheckoutUrl);return;}
+ if(document.body.dataset.variant==='6'){location.assign(blackBronzeBronzeCheckoutUrl);return;}
+ addCart();showCart();
+}));
 
 // Expand the captured specifications and description without inventing data.
 $('#see-more-button-hs-features')?.addEventListener('click',e=>{e.preventDefault();$('#highlighted_specs_attrs')?.scrollIntoView({behavior:'smooth'});});
