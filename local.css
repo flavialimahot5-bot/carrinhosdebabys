@@ -72,3 +72,14 @@ html{scroll-behavior:smooth}button,a,input,select{touch-action:manipulation}butt
  .ui-pdp-carousel-above-seller .poly-price__disc-label{flex-basis:100%;font-size:12px!important}
  .ui-pdp-carousel-above-seller .poly-component__shipping{font-size:13px!important;line-height:18px!important;margin-top:8px;word-break:normal!important}
 }
+
+@media(max-width:900px){
+ .ui-pdp-recommendations-row:has(.ui-pdp-carousel-above-seller){padding:0!important}
+ .ui-recommendations-carousel-wrapper-ref:has(.ui-pdp-carousel-above-seller){padding:24px 16px!important}
+ .ui-recommendations-carousel-wrapper-ref .ui-pdp-carousel-above-seller{padding:0!important}
+ .ui-recommendations-carousel-wrapper-ref .ui-pdp-carousel-above-seller .poly-card{padding:0!important}
+}
+
+@media(max-width:900px){
+ .ui-recommendations-carousel-wrapper-ref .ui-pdp-carousel-above-seller .poly-card.poly-card--list-card .poly-card__portada{align-self:stretch!important;flex:0 0 180px!important;width:100%!important;min-width:100%!important;max-width:none!important;height:180px!important;min-height:180px!important;max-height:180px!important;aspect-ratio:auto!important}
+}
