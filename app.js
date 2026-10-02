@@ -32,7 +32,7 @@ function cart(){return read('romanzo-cart',[]).map(p=>testPriceLabel?{...p,price
 function updateCart(){const n=cart().reduce((sum,p)=>sum+p.quantity,0);const c=$('#nav-cart');if(c){c.setAttribute('aria-label',n+' produtos em seu carrinho');let badge=$('.local-cart-count',c);if(!badge){badge=document.createElement('span');badge.className='local-cart-count';c.append(badge);}badge.textContent=n||'';}}
 function currentProduct(){return {id:document.body.dataset.variant,title:$('h1').textContent,variant:$('.ui-pdp-outside_variations__title__value')?.textContent||'',image:pictures[0]?.src,quantity,price:testPriceLabel||$('.ui-pdp-price__second-line .andes-money-amount')?.getAttribute('aria-label')||$('.ui-pdp-price').textContent.trim(),url:location.pathname};}
 function addCart(){const items=cart(),product=currentProduct(),existing=items.find(x=>x.id===product.id);if(existing)existing.quantity+=quantity;else items.push(product);write('romanzo-cart',items);updateCart();toast('Produto adicionado ao carrinho');}
-function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Itens salvos neste navegador. Pagamento e envio de pedidos não estão disponíveis.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button></div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
+function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Finalize a compra da cor desejada pelo botão abaixo.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button>${checkoutUrl(p.id)?`<a class="local-cart-checkout" href="${esc(checkoutUrl(p.id))}" aria-label="Finalizar agora: ${esc(p.variant)}">Finalizar agora</a>`:''}</div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
 $('#nav-cart')?.addEventListener('click',e=>{e.preventDefault();showCart();});updateCart();
 $$('button').filter(b=>b.textContent.trim()==='Adicionar ao carrinho').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();}));
 const grayCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_jahknNngdy_Tyq7ipdL5djR6jlucAJWMbZ4MRqYWrRE';
@@ -41,14 +41,11 @@ const blackHailSilverCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_CU
 const blackBronzeCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_y3MMhLQ8eUzbJtKEwkW4jFCIaY1jBZT2diQ52hTTjl8';
 const blackSilverCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_c28r_6dJKP6xmg7RXnIMPH_bw9-h3fnA935oa9z_WR0';
 const blackBronzeBronzeCheckoutUrl='https://gateway-pzol.vercel.app/comprar/prd_hh3LnpGHYoQekPXmTyy6acB1hpiZCM6oNlzD4jUNVZU';
+function checkoutUrl(variant){return ({'0':grayCheckoutUrl,'1':grayCheckoutUrl,'2':silverCheckoutUrl,'3':blackHailSilverCheckoutUrl,'4':blackBronzeCheckoutUrl,'5':blackSilverCheckoutUrl,'6':blackBronzeBronzeCheckoutUrl})[String(variant)]||null;}
 $$('button[data-buy-local]').forEach(b=>b.addEventListener('click',e=>{
  e.preventDefault();
- if(['0','1'].includes(document.body.dataset.variant)){location.assign(grayCheckoutUrl);return;}
- if(document.body.dataset.variant==='2'){location.assign(silverCheckoutUrl);return;}
- if(document.body.dataset.variant==='3'){location.assign(blackHailSilverCheckoutUrl);return;}
- if(document.body.dataset.variant==='4'){location.assign(blackBronzeCheckoutUrl);return;}
- if(document.body.dataset.variant==='5'){location.assign(blackSilverCheckoutUrl);return;}
- if(document.body.dataset.variant==='6'){location.assign(blackBronzeBronzeCheckoutUrl);return;}
+ const url=checkoutUrl(document.body.dataset.variant);
+ if(url){location.assign(url);return;}
  addCart();showCart();
 }));
 
