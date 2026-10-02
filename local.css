@@ -53,3 +53,22 @@ html{scroll-behavior:smooth}button,a,input,select{touch-action:manipulation}butt
 }
 
 .local-cart-item>div{flex:1;min-width:0}.local-cart-item .local-cart-checkout{display:block;margin-top:16px;padding:15px 12px;border-radius:6px;background:#3483fa;color:#fff;font-size:16px;font-weight:600;text-align:center;text-decoration:none;line-height:18px}.local-cart-checkout:hover{background:#2968c8}.local-cart-checkout:focus-visible{outline:3px solid #1f4e96;outline-offset:3px}
+
+/* Seller recommendations: vertical cards with readable content on mobile. */
+@media(max-width:900px){
+ .ui-pdp-carousel-above-seller{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box;padding:24px 16px!important;margin:0!important;overflow:hidden}
+ .ui-pdp-carousel-above-seller .ui-recommendations-carousel-snapped__header{padding:0!important;margin:0 0 18px!important}
+ .ui-pdp-carousel-above-seller .ui-recommendations-title-link{font-size:22px!important;line-height:1.25!important;margin:0!important}
+ .ui-pdp-carousel-above-seller .andes-carousel-snapped{width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory}
+ .ui-pdp-carousel-above-seller .andes-carousel-snapped__wrapper{display:flex!important;flex-wrap:nowrap!important;gap:12px!important;width:100%!important;transform:none!important;overflow:visible!important;align-items:stretch;padding:0 0 12px!important}
+ .ui-pdp-carousel-above-seller .andes-carousel-snapped__slide{flex:0 0 220px!important;width:220px!important;min-width:220px!important;max-width:220px!important;margin:0!important;scroll-snap-align:start}
+ .ui-pdp-carousel-above-seller .poly-card{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;box-sizing:border-box;overflow:hidden;border:1px solid #e5e5e5;border-radius:8px;background:#fff}
+ .ui-pdp-carousel-above-seller .poly-card__portada{flex:0 0 180px!important;width:100%!important;height:180px!important;min-width:0!important;min-height:0!important;margin:0!important;padding:16px!important;box-sizing:border-box}
+ .ui-pdp-carousel-above-seller .poly-component__picture{position:static!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important}
+ .ui-pdp-carousel-above-seller .poly-card__content{flex:1!important;width:100%!important;min-width:0!important;margin:0!important;padding:12px 16px 16px!important;box-sizing:border-box}
+ .ui-pdp-carousel-above-seller .poly-component__title{display:-webkit-box!important;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;font-size:14px!important;line-height:20px!important;min-height:60px}
+ .ui-pdp-carousel-above-seller .poly-price__current{display:flex;flex-wrap:wrap!important;gap:4px 8px!important;margin-top:8px}
+ .ui-pdp-carousel-above-seller .poly-price__amount{font-size:20px!important;white-space:nowrap}
+ .ui-pdp-carousel-above-seller .poly-price__disc-label{flex-basis:100%;font-size:12px!important}
+ .ui-pdp-carousel-above-seller .poly-component__shipping{font-size:13px!important;line-height:18px!important;margin-top:8px;word-break:normal!important}
+}
