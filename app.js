@@ -11,7 +11,6 @@ document.addEventListener('submit',e=>e.preventDefault());
 
 const testPrice=document.body.dataset.testPrice;
 const testPriceLabel=testPrice?Number(testPrice).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):null;
-const sourceLink=()=>'<p class="local-muted">Recurso externo indisponível nesta demonstração.</p>';
 
 // Original radio-based gallery, with keyboard-accessible full-screen photo viewer.
 const pictures=$$('.ui-pdp-gallery__figure__image');let activePictures=pictures,photoIndex=0;
@@ -32,11 +31,11 @@ $('#quantity-selector')?.addEventListener('click',()=>{modal('<h2>Selecione a qu
 function cart(){return read('romanzo-cart',[]).map(p=>testPriceLabel?{...p,price:testPriceLabel}:p);}
 function updateCart(){const n=cart().reduce((sum,p)=>sum+p.quantity,0);const c=$('#nav-cart');if(c){c.setAttribute('aria-label',n+' produtos em seu carrinho');let badge=$('.local-cart-count',c);if(!badge){badge=document.createElement('span');badge.className='local-cart-count';c.append(badge);}badge.textContent=n||'';}}
 function currentProduct(){return {id:document.body.dataset.variant,title:$('h1').textContent,variant:$('.ui-pdp-outside_variations__title__value')?.textContent||'',image:pictures[0]?.src,quantity,price:testPriceLabel||$('.ui-pdp-price__second-line .andes-money-amount')?.getAttribute('aria-label')||$('.ui-pdp-price').textContent.trim(),url:location.pathname};}
-function addCart(){const items=cart(),product=currentProduct(),existing=items.find(x=>x.id===product.id);if(existing)existing.quantity+=quantity;else items.push(product);write('romanzo-cart',items);updateCart();toast('Produto adicionado ao carrinho de demonstração');}
-function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Demonstração local · nenhuma compra será realizada.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button></div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
+function addCart(){const items=cart(),product=currentProduct(),existing=items.find(x=>x.id===product.id);if(existing)existing.quantity+=quantity;else items.push(product);write('romanzo-cart',items);updateCart();toast('Produto adicionado ao carrinho');}
+function showCart(){const items=cart();modal(`<h2>Seu carrinho</h2><p class="local-muted">Itens salvos neste navegador. Pagamento e envio de pedidos não estão disponíveis.</p>${items.length?items.map(p=>`<div class="local-cart-item"><img src="${esc(p.image)}" alt=""><div><a href="${esc(p.url)}">${esc(p.title)}</a><p>${esc(p.variant)} · ${p.quantity} unidade(s)</p><p>${esc(p.price)}</p><button class="local-text" data-remove="${esc(p.id)}">Remover</button></div></div>`).join(''):'<p>Seu carrinho está vazio.</p>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{write('romanzo-cart',cart().filter(p=>p.id!==b.dataset.remove));updateCart();showCart();});}
 $('#nav-cart')?.addEventListener('click',e=>{e.preventDefault();showCart();});updateCart();
 $$('button').filter(b=>b.textContent.trim()==='Adicionar ao carrinho').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();}));
-$$('button[data-buy-url]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();window.location.assign(b.dataset.buyUrl);}));
+$('button[data-buy-local]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();addCart();showCart();}));
 
 // Expand the captured specifications and description without inventing data.
 $('#see-more-button-hs-features')?.addEventListener('click',e=>{e.preventDefault();$('#highlighted_specs_attrs')?.scrollIntoView({behavior:'smooth'});});
@@ -54,22 +53,17 @@ $$('a').filter(a=>a.textContent.trim()==='Ver descrição completa').forEach(a=>
  };
 });
 $('#link__label')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('Link copiado!');}catch{modal(`<h2>Compartilhar</h2><input readonly aria-label="Link da página" value="${esc(location.href)}">`);}});
-$('#ui-pdp-price__payments-link')?.addEventListener('click',e=>{e.preventDefault();const section=$$('.ui-pdp-container__row').find(x=>x.className.includes('payment-methods'));modal('<h2>Meios de pagamento</h2>'+(section?.innerHTML||'<p>Pix, cartões de crédito e boleto bancário.</p>')+'<p class="local-muted">Condições capturadas do anúncio. Confirme valores e parcelamento na loja.</p>');});
-$$('button').filter(b=>/Mais detalhes e formas de entrega/.test(b.textContent)).forEach(b=>b.onclick=()=>modal(`<h2>Formas de entrega</h2><p>Os prazos e valores exibidos são demonstrativos. A consulta de CEP não está disponível neste teste.</p>${sourceLink('Consultar entrega')}`));
 $$('button').filter(b=>b.textContent.trim()==='Seguir').forEach(b=>b.onclick=()=>{const following=b.textContent.trim()==='Seguindo';b.textContent=following?'Seguir':'Seguindo';b.setAttribute('aria-pressed',String(!following));toast(following?'Loja removida da sua lista local':'Loja adicionada à sua lista local');});
 
 // Review interactions apply only to the captured, real review excerpts.
 $$('.ui-review-capability-valorizations__button-like').forEach((button,i)=>{const count=button.querySelector('[class*=count]');const key='romanzo-review-like-'+i;const initial=Number(count?.textContent)||0;const apply=value=>{button.setAttribute('aria-checked',String(value));button.classList.toggle('local-liked',value);if(count)count.textContent=initial+(value?1:0);};apply(read(key,false));button.onclick=()=>{const value=button.getAttribute('aria-checked')!=='true';write(key,value);apply(value);};});
 $$('.ui-review-capability-comments__comment__content__read-more').forEach(b=>b.onclick=()=>{b.parentElement.classList.add('local-expanded');b.hidden=true;});
-$('.show-more-click')?.addEventListener('click',()=>modal(`<h2>Opiniões do produto</h2><p>A página original informa 828 avaliações e 407 comentários. Esta reprodução preserva os comentários que estavam disponíveis na página consultada.</p>${sourceLink('Ver todas as opiniões na origem')}`));
 $('#dropdown-button-orderCriteria')?.addEventListener('click',()=>{modal('<h2>Ordenar opiniões</h2><div class="local-options"><button data-sort="relevance">Mais relevantes</button><button data-sort="recent">Mais recentes</button></div>');$$('[data-sort]').forEach(b=>b.onclick=()=>{const reviews=$$('.ui-review-capability-comments__comment');reviews.sort((a,b)=>b.dataset.reviewIndex-a.dataset.reviewIndex);if(b.dataset.sort==='relevance')reviews.reverse();reviews.forEach(r=>r.parentElement.parentElement.append(r.parentElement));dialog.close();toast('Opiniões exibidas por '+(b.dataset.sort==='recent'?'mais recentes':'relevância'));});});
 $$('.ui-review-capability-comments__comment').forEach((r,i)=>r.dataset.reviewIndex=i);
 $('#dropdown-button-rating')?.addEventListener('click',()=>{modal('<h2>Filtrar por qualificação</h2><div class="local-options">'+[0,5,4,3,2,1].map(n=>`<button data-rating="${n}">${n?n+' estrelas':'Todas as qualificações'}</button>`).join('')+'</div>');$$('[data-rating]').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.rating);$$('.ui-review-capability-comments__comment').forEach(r=>r.hidden=n!==0&&n!==5);dialog.close();if(n&&n!==5)toast('Nenhuma opinião com esta nota nos comentários capturados.');});});
-$$('button').filter(b=>b.textContent.trim()==='Perguntar').forEach(b=>b.onclick=()=>{const input=$('#questions input')||$('input[aria-label="questions-ai-form-input"]');if(!input?.value.trim()){input?.focus();toast('Digite uma pergunta sobre o produto.');return;}modal(`<h2>Sua pergunta</h2><p>${esc(input.value)}</p><p>Pergunta demonstrativa. Nenhuma mensagem foi enviada.</p>${sourceLink('Abrir perguntas no Mercado Livre')}`);});
 
 // Original horizontal cards can also be browsed using their arrow controls.
 $$('.andes-carousel-snapped').forEach(carousel=>{const track=$('.andes-carousel-snapped__wrapper',carousel)||$('.andes-carousel-snapped__container',carousel);if(!track)return;track.style.overflowX='auto';$$('button',carousel).filter(b=>/Seguinte|Anterior/.test(b.getAttribute('aria-label')||'')).forEach(b=>b.onclick=()=>track.scrollBy({left:(/Anterior/.test(b.getAttribute('aria-label'))?-1:1)*track.clientWidth*.85,behavior:'smooth'}));});
-$$('form.nav-search').forEach(form=>form.addEventListener('submit',()=>{const q=$('input',form)?.value.trim();if(q)toast('Busca demonstrativa: explore as variantes deste produto.');}));
 // Keep the two seller offers mutually exclusive and preserve their captured prices.
 const offers=$$('.ui-pdp-buy-box-offers__offer-list-item');
 const offerDetails=$('.ui-pdp-buy-box-offers__offer-list-children');
@@ -91,8 +85,6 @@ reviews.forEach((review,i)=>{const date=$('[class*=date-container]',review)?.tex
 $('#dropdown-button-orderCriteria')?.addEventListener('click',()=>{
  $$('[data-sort]',content).forEach(button=>button.onclick=()=>{const order=button.dataset.sort;[...reviews].sort((a,b)=>order==='recent'?Number(a.dataset.ageMonths)-Number(b.dataset.ageMonths):Number(a.dataset.originalOrder)-Number(b.dataset.originalOrder)).forEach(r=>r.parentElement.parentElement.append(r.parentElement));dialog.close();toast(order==='recent'?'Opiniões mais recentes primeiro':'Opiniões mais relevantes primeiro');});
 });
-$$('button').filter(b=>(b.getAttribute('aria-label')||'').includes('Enviar para')).forEach(b=>b.onclick=()=>modal('<h2>Local de entrega</h2><p>O endereço exibido pertence à consulta de referência. A consulta de outro CEP não está disponível neste teste.</p>'+sourceLink('Consultar meu CEP')));
-$('#nav-footer-access-switch')?.addEventListener('click',()=>modal('<h2>Sobre esta página</h2><p>Reprodução visual local do anúncio Romanzo Infanti, consultado em 26/09/2026. As funções de carrinho e favoritos são demonstrativas e ficam apenas neste navegador.</p>'+sourceLink()));
 offers.forEach(offer=>offer.addEventListener('click',event=>{if(event.target.closest('button,a,select,input'))return;const radio=$('input[type=radio]',offer);if(radio&&!radio.checked){radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));}}));
 
 // Preserve local handlers while keeping reference-only controls on this page.

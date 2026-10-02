@@ -64,7 +64,7 @@ for(let index=0;index<sources.length;index++){
  $('button').filter((i,e)=>['Comprar agora','Adicionar ao carrinho'].includes($(e).text().trim())).each((i,e)=>{
   const button=$(e);
   button.removeAttr('disabled').removeAttr('aria-disabled').removeAttr('data-andes-state').removeAttr('formaction').removeClass('andes-button--disabled').attr('type','button');
-  if(button.text().trim()==='Comprar agora')button.attr('data-buy-url','https://google.com');
+  if(button.text().trim()==='Comprar agora')button.attr('data-buy-local','true');
  });
  $('.ui-pdp-action-icon--undefined').removeClass('ui-pdp-action-icon--undefined').addClass('ui-pdp-action-icon--BLUE');
  $('script,iframe,noscript,link[rel=prefetch],link[rel=preconnect],link[rel=dns-prefetch],meta[http-equiv],input[type=hidden],#g_id_onload,.grecaptcha-badge').remove();
@@ -80,6 +80,10 @@ for(let index=0;index<sources.length;index++){
  $('a[href]').each((i,e)=>{const a=$(e),href=a.attr('href');if(/^https?:/i.test(href)){a.removeAttr('href').removeAttr('target').removeAttr('rel').attr('data-local-only','true').attr('role','button').attr('tabindex','0');}});
  $('.nav-logo').attr('href','/').removeAttr('data-local-only').removeAttr('role').removeAttr('tabindex');
  $('[formaction]').removeAttr('formaction');
+ $('#questions,.show-more-click,#ui-pdp-price__payments-link,.nav-search,.nav-footer-access,.nav-shortcut-menu,.clip-wrapper,.clip-picture-icon').remove();
+ $('button').filter((i,e)=>/Mais detalhes e formas de entrega|Perguntar|Mostrar todas as opiniões|Mais opções/.test($(e).text())||($(e).attr('aria-label')||'').includes('Enviar para')).remove();
+ $('[data-local-only]').each((i,e)=>{const el=$(e);if(el.attr('id')==='nav-cart'||el.hasClass('ui-pdp-collapsable__action'))return;el.replaceWith('<span class="'+(el.attr('class')||'')+'">'+el.html()+'</span>');});
+ $('link[rel=canonical]').remove();
  $('.ui-pdp-gallery__figure__image').each((i,e)=>{const url=$(e).attr('data-zoom')||$(e).attr('src');$(e).attr('data-full-image',url).attr('src',url);});
  const jobs=[];
  $('img[src],link[rel=stylesheet],link[as=font]').each((i,e)=>jobs.push(async()=>{const el=$(e),attr=e.name==='img'?'src':'href';el.attr(attr,await asset(el.attr(attr)));}));
@@ -88,7 +92,7 @@ for(let index=0;index<sources.length;index++){
  for(let i=0;i<jobs.length;i+=12)await Promise.all(jobs.slice(i,i+12).map(j=>j()));
  $('meta[name=viewport]').remove();
  $('head').append('<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/local.css"><script defer src="/app.js"></script><script defer src="/responsive.js"></script>');
- $('body').attr('data-variant',String(index)).attr('data-source-url',source.url).append('<dialog id="local-dialog"><button class="local-close" aria-label="Fechar">×</button><div id="local-dialog-content"></div></dialog><div id="local-toast" role="status" aria-live="polite"></div><p class="local-notice">Reprodução local para demonstração. Conteúdo consultado em 26/09/2026. Sem vínculo com o Mercado Livre. Preços, estoque, frete e opiniões não são atualizados em tempo real.</p>');
+ $('body').attr('data-variant',String(index)).attr('data-source-url',source.url).append('<dialog id="local-dialog"><button class="local-close" aria-label="Fechar">×</button><div id="local-dialog-content"></div></dialog><div id="local-toast" role="status" aria-live="polite"></div><p class="local-notice">Página independente, sem vínculo com o Mercado Livre. Conteúdo de referência; preços, estoque, frete e opiniões não são atualizados em tempo real.</p>');
  $('.ui-pdp-container__row--reviews-capability-v3').attr('id','local-reviews');
  $('.ui-pdp-review__label--link').attr('href','#local-reviews').removeAttr('target');
  await fs.writeFile(index===0?'index.html':'variant-'+index+'.html',$.html());

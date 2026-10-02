@@ -22,7 +22,7 @@ Abra http://localhost:5173. O servidor escuta apenas em 127.0.0.1.
 
 ## Limites
 
-É uma reprodução visual, não uma loja integrada ao Mercado Livre. O botão Comprar agora abre https://google.com na mesma aba, como teste de redirecionamento. Perguntas são apenas demonstrativas, sem envio externo. Não há checkout, login, consulta real de CEP ou atualização de estoque/preço. As 828 avaliações são a contagem informada na fonte; foram preservados os cinco comentários e as fotos disponíveis na página inicial, não o histórico completo. Vídeo, busca, recomendações e links institucionais não abrem sites externos. Controles sem implementação local mostram um aviso de demonstração. Todas as variantes, inclusive preto/bronze, estão habilitadas para o teste; isso não representa disponibilidade real de estoque ou entrega.
+É uma reprodução visual, não uma loja integrada ao Mercado Livre. O botão Comprar agora adiciona o item e abre o carrinho local. Perguntas e controles sem integração foram removidos. Não há checkout, login, consulta real de CEP ou atualização de estoque/preço. As 828 avaliações são a contagem informada na fonte; foram preservados os cinco comentários e as fotos disponíveis na página inicial, não o histórico completo. Vídeo, busca, recomendações e links institucionais não abrem sites externos. Não há redirecionamento externo; controles sem implementação local foram removidos ou convertidos em texto. Todas as variantes, inclusive preto/bronze, estão habilitadas para o teste; isso não representa disponibilidade real de estoque ou entrega.
 
 A fidelidade é ao estado consultado; dados, publicidade, localização e conteúdo dinâmico podem mudar na origem. As sete variantes usam o preço de teste de R$ 67,90, inclusive no carrinho.
 
