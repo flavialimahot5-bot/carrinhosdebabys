@@ -14,7 +14,10 @@ for(let i=0;i<7;i++){
  $('.ui-pdp-price .andes-money-amount__fraction').each((_,e)=>assert.equal($(e).text(),'67,90',`${filename}: visible decimal comma`));
  assert.equal($('.ui-pdp-outside_variations__thumbnails__item').length,7);
  assert.ok($('.ui-pdp-gallery__figure__image').length>=6);
- assert.equal($('script').length,2);assert.equal($('script').first().attr('src'),'/app.js');assert.equal($('script').last().attr('src'),'/responsive.js');
+ assert.equal($('script').length,3);assert.deepEqual($('script[src]').map((_,e)=>$(e).attr('src')).get(),['/app.js','/responsive.js']);
+ assert.equal($('head script#microsoft-clarity').length,1);
+ assert.ok($('#microsoft-clarity').text().includes('https://www.clarity.ms/tag/'));
+ assert.ok($('#microsoft-clarity').text().includes('yrkm9wkpn5'));
  assert.equal($('iframe').length,0);
  assert.equal($('a[href^="http"],a[href^="//"],[formaction],form[action]').length,0,`${filename}: external navigation removed`);
  $('img[src^="/assets/"],link[href^="/assets/"]').each((_,e)=>{const url=$(e).attr(e.name==='img'?'src':'href');assert.ok(fs.existsSync('.'+url),url);});

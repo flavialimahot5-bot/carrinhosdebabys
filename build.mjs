@@ -91,6 +91,13 @@ for(let index=0;index<sources.length;index++){
  // Limit parallel downloads to avoid saturating the connection.
  for(let i=0;i<jobs.length;i+=12)await Promise.all(jobs.slice(i,i+12).map(j=>j()));
  $('meta[name=viewport]').remove();
+ $('head').append(`<script type="text/javascript" id="microsoft-clarity">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "yrkm9wkpn5");
+</script>`);
  $('head').append('<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/local.css?v=20261002-cards2"><script defer src="/app.js"></script><script defer src="/responsive.js"></script>');
  $('body').attr('data-variant',String(index)).attr('data-source-url',source.url).append('<dialog id="local-dialog"><button class="local-close" aria-label="Fechar">×</button><div id="local-dialog-content"></div></dialog><div id="local-toast" role="status" aria-live="polite"></div><p class="local-notice">Página independente, sem vínculo com o Mercado Livre. Conteúdo de referência; preços, estoque, frete e opiniões não são atualizados em tempo real.</p>');
  $('.ui-pdp-container__row--reviews-capability-v3').attr('id','local-reviews');
